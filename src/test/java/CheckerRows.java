@@ -156,12 +156,6 @@ public class CheckerRows {
         Assert.assertEquals("stopper79@gmail.com", driver.findElement(By.id("id_email")).getAttribute("value"));
         Assert.assertEquals("+123456789", driver.findElement(By.id("id_contact-0-value")).getAttribute("value"));
         logger.info("Все проверки пройдены");
-
-
-
-
     }
-
-
 
 }
