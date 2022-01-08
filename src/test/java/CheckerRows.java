@@ -5,7 +5,8 @@ import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-//import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -18,7 +19,7 @@ public class CheckerRows {
     private  String logSite = "";
     private  String pasSite = "";
 
-    WebDriver driver;
+    protected static WebDriver driver;
     private final Logger logger = LogManager.getLogger(CheckerRows.class);
 
     //чтение переменных из файла
@@ -28,9 +29,9 @@ public class CheckerRows {
         fis = new FileInputStream("src/main/resources/config.properties");
         property.load(fis);
 
-          host = property.getProperty("site.host");
-          logSite = property.getProperty("site.login");
-          pasSite = property.getProperty("site.pass");
+        host = property.getProperty("site.host");
+        logSite = property.getProperty("site.login");
+        pasSite = property.getProperty("site.pass");
     }
 
     @Before
@@ -45,7 +46,7 @@ public class CheckerRows {
 
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(3,TimeUnit.SECONDS);
         logger.info("Драйвер запущен");
     }
 
@@ -55,7 +56,7 @@ public class CheckerRows {
             driver.quit();
         logger.info("Драйвер закрыт");
     }
-    private void Auth() throws InterruptedException {
+    private void Auth() {
 
         String locator = "button.header2__auth.js-open-modal";
         driver.findElement(By.cssSelector(locator)).click();
@@ -63,16 +64,17 @@ public class CheckerRows {
         driver.findElement(By.cssSelector("div.new-input-line_slim:nth-child(3) > input:nth-child(1)")).sendKeys(logSite);
         driver.findElement(By.cssSelector(".js-psw-input")).clear();
         driver.findElement(By.cssSelector(".js-psw-input")).sendKeys(pasSite);
-        driver.findElement(By.cssSelector("div.new-input-line_last:nth-child(5) > button:nth-child(1)")).submit();
+        driver.findElement(By.xpath("//button[contains(.,'Войти')]")).click();
         logger.info("Успешная авторизация");
 
     }
-    private void  enterLC() throws InterruptedException {
+    public void  enterLC() throws InterruptedException {
+        Thread.sleep(1000);//без него на chrome не запускается(раньше запускался) на firefox работает.
         driver.get(host+"/lk/biography/personal/");
         logger.info("Вход в личный кабинет");
     }
     @Test
-    public void openPage() throws InterruptedException, IOException {
+    public void openPage() throws InterruptedException {
         //1. Открыть otus.ru
         driver.get(host);
         logger.info("Открыта главная страница отус");
@@ -81,6 +83,7 @@ public class CheckerRows {
         Auth();
 
         //3. Войти в личный кабинет
+
         enterLC();
 
         //4. Заполнить контакты
@@ -119,7 +122,7 @@ public class CheckerRows {
         }
         driver.findElement(By.cssSelector(".radio:nth-child(1)")).click();
 
-       if(!driver.findElement(By.cssSelector(".input_straight-top-right.input_no-border-right.lk-cv-block__input_fake.lk-cv-block__input_select-fake.js-custom-select-presentation")).getText().contains("Viber"));
+        if(!driver.findElement(By.cssSelector(".input_straight-top-right.input_no-border-right.lk-cv-block__input_fake.lk-cv-block__input_select-fake.js-custom-select-presentation")).getText().contains("Viber"));
         {
             driver.findElement(By.cssSelector(".input_straight-top-right.input_no-border-right.lk-cv-block__input_fake.lk-cv-block__input_select-fake.js-custom-select-presentation")).click();
             driver.findElement(By.cssSelector(".lk-cv-block__select-scroll_service > .lk-cv-block__select-option:nth-child(6)")).click();
