@@ -136,7 +136,7 @@ public class CheckerRows {
         //6. Открыть https://otus.ru в “чистом браузере”
         driver.quit();
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         logger.info("Драйвер запущен");
         driver.get(host);
         //7. Авторизоваться на сайте
