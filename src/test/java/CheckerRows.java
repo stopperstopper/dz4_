@@ -1,3 +1,11 @@
+/*
+Автор Садыков Александр
+Тест
+Ввод данных в личном кабинете otus.ru
+Проверка вводимых данных
+сайт/логин/пароль берется из файла config.properties(вариант из environment variables)
+log file logs.log
+ */
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,7 +18,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 import static java.lang.System.getenv;
 
 
@@ -138,6 +145,7 @@ public class CheckerRows {
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         logger.info("Драйвер запущен");
+        logger.info("Запущена проверка полей");
         driver.get(host);
         //7. Авторизоваться на сайте
         Auth();
