@@ -13,7 +13,7 @@ import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
@@ -29,8 +29,9 @@ public class CheckerRows {
     protected static WebDriver driver;
     private final Logger logger = LogManager.getLogger(CheckerRows.class);
 
+
     //чтение переменных из файла
-    public void Vars() throws IOException {
+    public void varsSite() throws IOException {
         FileInputStream fis;
         Properties property = new Properties();
         fis = new FileInputStream("src/main/resources/config.properties");
@@ -39,17 +40,19 @@ public class CheckerRows {
         host = property.getProperty("site.host");
         logSite = property.getProperty("site.login");
         pasSite = property.getProperty("site.pass");
+        logger.info("------------------------------");
+        logger.info("Новый прогон теста");
     }
 
     @Before
-    public void StartUp() throws IOException {
+    public void startUp() throws IOException {
         /*
       переменные окружениия можно и так
         logSite = System.getenv("siteLogin");
        pasSite = System.getenv("sitePas");
       */
 
-        Vars();
+        varsSite();
 
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
@@ -58,12 +61,12 @@ public class CheckerRows {
     }
 
     @After
-    public void End(){
+    public void closeDriver(){
         if (driver!=null)
             driver.quit();
         logger.info("Драйвер закрыт");
     }
-    private void Auth() {
+    private void auth() {
 
         String locator = "button.header2__auth.js-open-modal";
         driver.findElement(By.cssSelector(locator)).click();
@@ -87,7 +90,7 @@ public class CheckerRows {
         logger.info("Открыта главная страница отус");
 
         //2. Авторизоваться на сайте
-        Auth();
+        auth();
 
         //3. Войти в личный кабинет
 
@@ -148,7 +151,7 @@ public class CheckerRows {
         logger.info("Запущена проверка полей");
         driver.get(host);
         //7. Авторизоваться на сайте
-        Auth();
+        auth();
         //8. Войти в личный кабинет
         enterLC();
         //9. Проверить, что в разделе о себе отображаются указанные ранее данные
